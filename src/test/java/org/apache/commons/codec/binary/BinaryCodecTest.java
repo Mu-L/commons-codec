@@ -17,6 +17,7 @@
 
 package org.apache.commons.codec.binary;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -539,6 +540,9 @@ class BinaryCodecTest {
     void testFromAsciiByteArray() {
         assertEquals(0, BinaryCodec.fromAscii((byte[]) null).length);
         assertEquals(0, BinaryCodec.fromAscii(new byte[0]).length);
+        assertArrayEquals(new byte[0], BinaryCodec.fromAscii("1".getBytes(CHARSET_UTF8)));
+        assertArrayEquals(new byte[] { 0 }, BinaryCodec.fromAscii("100000000".getBytes(CHARSET_UTF8)));
+        assertArrayEquals(new byte[] { (byte) 0x80 }, BinaryCodec.fromAscii("010000000".getBytes(CHARSET_UTF8)));
         // With a single raw binary
         byte[] bits = new byte[1];
         byte[] decoded = BinaryCodec.fromAscii("00000000".getBytes(CHARSET_UTF8));
@@ -630,6 +634,9 @@ class BinaryCodecTest {
     void testFromAsciiCharArray() {
         assertEquals(0, BinaryCodec.fromAscii((char[]) null).length);
         assertEquals(0, BinaryCodec.fromAscii(new char[0]).length);
+        assertArrayEquals(new byte[0], BinaryCodec.fromAscii("1".toCharArray()));
+        assertArrayEquals(new byte[] { 0 }, BinaryCodec.fromAscii("100000000".toCharArray()));
+        assertArrayEquals(new byte[] { (byte) 0x80 }, BinaryCodec.fromAscii("010000000".toCharArray()));
         // With a single raw binary
         byte[] bits = new byte[1];
         byte[] decoded = BinaryCodec.fromAscii("00000000".toCharArray());
@@ -1068,6 +1075,7 @@ class BinaryCodecTest {
         bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);
         encoded = BinaryCodec.toAsciiString(bits);
         assertEquals("1111111111111111", encoded);
+        assertEquals("", BinaryCodec.toAsciiString(null));
     }
 
     /**
@@ -1158,4 +1166,5 @@ class BinaryCodecTest {
         assertEquals(new String(bits), new String(decoded));
         assertEquals(0, instance.toByteArray((String) null).length);
     }
+
 }
