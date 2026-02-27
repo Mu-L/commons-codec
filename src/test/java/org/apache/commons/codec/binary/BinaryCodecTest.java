@@ -18,6 +18,7 @@
 package org.apache.commons.codec.binary;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.charset.Charset;
@@ -519,13 +520,7 @@ class BinaryCodecTest {
      */
     @Test
     void testEncodeObjectException() {
-        try {
-            instance.encode("");
-        } catch (final EncoderException e) {
-            // all is well.
-            return;
-        }
-        fail("Expected EncoderException");
+        assertThrows(EncoderException.class, () -> instance.encode(""));
     }
 
     /*
